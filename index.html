@@ -41,13 +41,11 @@
   #intro h1 { font-weight: 400; font-size: clamp(40px, 10vw, 100px); letter-spacing: 0.3em; }
   #intro .date { letter-spacing: 0.35em; opacity: 0.85; font-size: clamp(14px, 2.8vw, 22px); }
   #intro .hint { font-family: "Hiragino Sans", sans-serif; font-size: 14px; opacity: 0.8; line-height: 1.8; }
+  #intro .main { font-size: 17px; padding: 12px 34px; border-color: rgba(243,239,232,0.9); }
+  #intro .credit, .endcredit { font-family: "Hiragino Sans", sans-serif; font-size: 10px; opacity: 0.55; line-height: 1.7; letter-spacing: 0.02em; }
+  .endcredit { position: absolute; bottom: 18px; left: 0; right: 0; text-align: center; }
   #intro button { font-family: "Hiragino Sans", sans-serif; background: transparent; color: #f3efe8;
     border: 1px solid rgba(243,239,232,0.6); padding: 10px 22px; border-radius: 999px; font-size: 14px; cursor: pointer; }
-  #player { width: min(520px, 92vw); }
-  #dock { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); width: min(520px, 92vw);
-    z-index: 6; transition: opacity 600ms; }
-  body.playing #dock { opacity: 0.0; }
-  body.playing #dock:hover, body.show-ui #dock { opacity: 1; }
   #count { position: fixed; right: 14px; top: 12px; font-family: "Hiragino Sans", sans-serif; font-size: 12px;
     opacity: 0; z-index: 6; transition: opacity 600ms; }
   body.show-ui #count { opacity: 0.7; }
@@ -62,16 +60,16 @@
 <div id="intro">
   <h1>七五三</h1>
   <div class="date">2026 . 11 . 3 ／ 森戸大明神</div>
-  <div class="hint">下の Spotify の ▶ を押すと、曲と一緒に写真が流れます<br>（Spotify にログインしていると最後まで聴けます）</div>
+  <button id="play" class="main">▶ 再生する</button>
   <button id="silent">音なしで見る</button>
+  <div class="credit">Music: "Bossa Antigua" Kevin MacLeod (incompetech.com)<br>Licensed under Creative Commons: By Attribution 4.0 — creativecommons.org/licenses/by/4.0/</div>
 </div>
-<div id="dock"><div id="player"></div></div>
+<audio id="bgm" src="music/bossa_antigua.mp3" preload="auto"></audio>
 <div id="count"></div>
 <button id="fs" title="全画面">⛶</button>
 
 <script>
 const PHOTOS = [["001.jpg", 1920, 1440], ["002.jpg", 1440, 1920], ["003.jpg", 1440, 1920], ["004.jpg", 1920, 1440], ["005.jpg", 1920, 1440], ["006.jpg", 1920, 1440], ["007.jpg", 1440, 1920], ["008.jpg", 1920, 1440], ["009.jpg", 1440, 1920], ["010.jpg", 1920, 1440], ["011.jpg", 1920, 1441], ["012.jpg", 1440, 1920], ["013.jpg", 1920, 1440], ["014.jpg", 1920, 1440], ["015.jpg", 1920, 1440], ["016.jpg", 1920, 1440], ["017.jpg", 1920, 1440], ["018.jpg", 1920, 1440], ["019.jpg", 1920, 1440], ["020.jpg", 1440, 1920], ["021.jpg", 1920, 1440], ["022.jpg", 1920, 1440], ["023.jpg", 1920, 1440], ["024.jpg", 1920, 1440], ["025.jpg", 1920, 1440], ["026.jpg", 1920, 1440], ["027.jpg", 1920, 1440], ["028.jpg", 1920, 1440], ["029.jpg", 1920, 1440], ["030.jpg", 1920, 1440], ["031.jpg", 1440, 1920], ["032.jpg", 1920, 1440], ["033.jpg", 1920, 1440], ["034.jpg", 1920, 1440], ["035.jpg", 1920, 1440], ["036.jpg", 1920, 1440], ["037.jpg", 1920, 1440], ["038.jpg", 1920, 1440], ["039.jpg", 1920, 1440], ["040.jpg", 1920, 1440], ["041.jpg", 1440, 1920], ["042.jpg", 1920, 1440], ["043.jpg", 1920, 1440], ["044.jpg", 1920, 1440], ["045.jpg", 1920, 1440], ["046.jpg", 1920, 1440], ["047.jpg", 1920, 1440], ["048.jpg", 1920, 1440], ["049.jpg", 1920, 1440], ["050.jpg", 1920, 1440], ["051.jpg", 1920, 1440], ["052.jpg", 1440, 1920], ["053.jpg", 1920, 1440], ["054.jpg", 1920, 1440], ["055.jpg", 1920, 1440], ["056.jpg", 1920, 1440], ["057.jpg", 1920, 1440], ["058.jpg", 1920, 1440], ["059.jpg", 1440, 1920], ["060.jpg", 1440, 1920], ["061.jpg", 1920, 1440], ["062.jpg", 1920, 1440], ["063.jpg", 1920, 1439], ["064.jpg", 1440, 1920], ["065.jpg", 1439, 1920], ["066.jpg", 1920, 1440], ["067.jpg", 1439, 1920], ["068.jpg", 1439, 1920], ["069.jpg", 1920, 1440], ["070.jpg", 1920, 1440], ["071.jpg", 1920, 1440], ["072.jpg", 1920, 1439], ["073.jpg", 1920, 1440], ["074.jpg", 1440, 1920], ["075.jpg", 1440, 1920], ["076.jpg", 1440, 1920], ["077.jpg", 1583, 1541], ["078.jpg", 1575, 1533], ["079.jpg", 1537, 1497], ["080.jpg", 1530, 1490], ["081.jpg", 1920, 1440], ["082.jpg", 1920, 1441], ["083.jpg", 1440, 1920], ["084.jpg", 1920, 1441], ["085.jpg", 1920, 1440], ["086.jpg", 1920, 1440], ["087.jpg", 1920, 1439], ["088.jpg", 1920, 1439], ["089.jpg", 1920, 1440], ["090.jpg", 1920, 1440], ["091.jpg", 1920, 1440], ["092.jpg", 1440, 1920], ["093.jpg", 1440, 1920], ["094.jpg", 1920, 1440], ["095.jpg", 1920, 1440], ["096.jpg", 1440, 1920], ["097.jpg", 1440, 1920], ["098.jpg", 1440, 1920], ["099.jpg", 1920, 1440], ["100.jpg", 1920, 1440], ["101.jpg", 1440, 1920], ["102.jpg", 1440, 1920]];
-const TRACK = "spotify:track:3GiADMmI5jfkhF2o4a2G8N";
 // 並び：タイトル → 写真 → おわり（横長の画面では、続く縦写真2枚を左右に並べる）
 const landscapeScreen = window.innerWidth >= window.innerHeight;
 const frames = [{type: "title", h: "七五三", p: "2026 . 11 . 3"}];
@@ -110,7 +108,8 @@ const els = frames.map(f => {
     d.innerHTML = `<div class="pair"><div class="cell"><div class="half"></div></div><div class="cell"><div class="half"></div></div></div>`;
     d.dataset.srcs = f.srcs.join("|"); d.querySelectorAll(".half").forEach(setMove);
   } else {
-    d.innerHTML = `<div class="title"><h1>${f.h}</h1><p>${f.p}</p></div>`;
+    d.innerHTML = `<div class="title"><h1>${f.h}</h1><p>${f.p}</p></div>` +
+      (f.h === "おめでとう" ? `<div class="endcredit">Music: "Bossa Antigua" Kevin MacLeod (incompetech.com) / CC BY 4.0</div>` : "");
   }
   stage.appendChild(d); return d;
 });
@@ -148,16 +147,11 @@ function hideIntro() {
 
 // --- 曲に合わせて進める（曲の長さ ÷ 枚数） ---
 let mode = null, timer = null;
-function onPlayback(e) {
-  const { isPaused, position, duration } = e.data;
-  if (!duration) return;
-  if (duration < 60000) {            // 試聴（30秒）のときは一定間隔で進める
-    if (!isPaused && mode !== "timer") startTimer(3200);
-    return;
-  }
-  if (isPaused) return;
-  if (mode !== "song") { mode = "song"; stopTimer(); hideIntro(); }
-  const lead = 4000, tail = 6000;    // 最初はタイトル、最後は「おめでとう」
+const bgm = document.getElementById("bgm");
+function syncToSong() {
+  if (mode !== "song") return;
+  const duration = (bgm.duration || 283) * 1000, position = bgm.currentTime * 1000;
+  const lead = 4000, tail = 7000;    // 最初はタイトル、最後は「おめでとう」
   const span = Math.max(1, duration - lead - tail);
   let i;
   if (position < lead) i = 0;
@@ -165,7 +159,18 @@ function onPlayback(e) {
   else i = 1 + Math.floor((position - lead) / span * PHOTO_FRAMES);
   setPace(span / PHOTO_FRAMES);
   show(i);
+  requestAnimationFrame(syncToSong);
 }
+document.getElementById("play").onclick = () => {
+  mode = "song"; stopTimer(); hideIntro();
+  bgm.currentTime = 0; bgm.play().catch(() => startTimer(3200));
+  requestAnimationFrame(syncToSong);
+};
+// 画面をダブルタップで一時停止・再開
+document.getElementById("stage").addEventListener("dblclick", () => {
+  if (mode !== "song") return;
+  if (bgm.paused) { bgm.play(); requestAnimationFrame(syncToSong); } else bgm.pause();
+});
 function startTimer(ms) {
   mode = "timer"; hideIntro(); stopTimer(); setPace(ms);
   if (cur < 0) show(0);
@@ -173,12 +178,6 @@ function startTimer(ms) {
 }
 function stopTimer() { if (timer) clearInterval(timer); timer = null; }
 document.getElementById("silent").onclick = () => startTimer(3200);
-
-window.onSpotifyIframeApiReady = (IFrameAPI) => {
-  IFrameAPI.createController(document.getElementById("player"),
-    { uri: TRACK, width: "100%", height: 80 },
-    (ctrl) => { ctrl.addListener("playback_update", onPlayback); });
-};
 
 // 操作：タップで操作パネル、矢印キーで前後、全画面
 let uiT;
@@ -196,9 +195,9 @@ document.getElementById("fs").onclick = () => {
 };
 show(0);
 if (location.hash === "#silent") startTimer(3200);
+if (location.hash === "#play") document.getElementById("play").click();
 const mShow = location.hash.match(/^#show=(\w+)/);
 if (mShow) { hideIntro(); const k = mShow[1] === "pair" ? frames.findIndex(f => f.type === "pair") : +mShow[1]; show(k); }   // URLの最後に #silent で音なし自動再生
 </script>
-<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
 </body>
 </html>
