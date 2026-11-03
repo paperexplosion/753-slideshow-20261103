@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noimageindex">
+<title>七五三 2026.11.3</title>
+<style>
+  :root { --fade: 1400ms; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: #000; color: #f3efe8; overflow: hidden;
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif; }
+  #stage { position: fixed; inset: 0; }
+  .slide { position: absolute; inset: 0; opacity: 0; transition: opacity var(--fade) ease-in-out; }
+  .slide.on { opacity: 1; }
+  .bg { position: absolute; inset: -40px; background-size: cover; background-position: center;
+    filter: blur(28px) brightness(0.45) saturate(1.1); transform: scale(1.1); }
+  .ph { position: absolute; inset: 0; background-repeat: no-repeat; background-position: center;
+    background-size: contain; will-change: transform; }
+  .ph.cover { background-size: cover; }
+  .slide.run .ph, .slide.run .half { animation: kb var(--kbdur, 7s) linear forwards; }
+  @keyframes kb {
+    from { transform: translate(var(--x0, 0%), var(--y0, 0%)) scale(var(--s0, 1)); }
+    to   { transform: translate(var(--x1, 0%), var(--y1, 0%)) scale(var(--s1, 1.08)); }
+  }
+  .pair { position: absolute; inset: 0; display: flex; gap: 6px; background: #000; }
+  .pair .cell { flex: 1; overflow: hidden; position: relative; }
+  .pair .half { position: absolute; inset: 0; background-size: cover; background-position: center; will-change: transform; }
+  .slide.run .pair .cell:nth-child(2) .half { animation-delay: -1.2s; }
+  .title { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; text-align: center; gap: 18px; letter-spacing: 0.3em; }
+  .title h1 { font-weight: 400; font-size: clamp(40px, 9vw, 96px); opacity: 0; }
+  .title p { font-size: clamp(14px, 2.6vw, 22px); opacity: 0; }
+  .slide.on .title h1 { animation: rise 2.4s ease-out 0.3s forwards; }
+  .slide.on .title p { animation: rise 2.4s ease-out 1.1s forwards; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); letter-spacing: 0.5em; filter: blur(6px); }
+                    to { opacity: 0.95; transform: none; letter-spacing: 0.3em; filter: none; } }
+  #intro { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 22px; background: radial-gradient(ellipse at center, #1c1a17 0%, #000 75%);
+    z-index: 5; text-align: center; padding: 24px; transition: opacity 900ms; }
+  #intro h1 { font-weight: 400; font-size: clamp(40px, 10vw, 100px); letter-spacing: 0.3em; }
+  #intro .date { letter-spacing: 0.35em; opacity: 0.85; font-size: clamp(14px, 2.8vw, 22px); }
+  #intro .hint { font-family: "Hiragino Sans", sans-serif; font-size: 14px; opacity: 0.8; line-height: 1.8; }
+  #intro button { font-family: "Hiragino Sans", sans-serif; background: transparent; color: #f3efe8;
+    border: 1px solid rgba(243,239,232,0.6); padding: 10px 22px; border-radius: 999px; font-size: 14px; cursor: pointer; }
+  #player { width: min(520px, 92vw); }
+  #dock { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); width: min(520px, 92vw);
+    z-index: 6; transition: opacity 600ms; }
+  body.playing #dock { opacity: 0.0; }
+  body.playing #dock:hover, body.show-ui #dock { opacity: 1; }
+  #count { position: fixed; right: 14px; top: 12px; font-family: "Hiragino Sans", sans-serif; font-size: 12px;
+    opacity: 0; z-index: 6; transition: opacity 600ms; }
+  body.show-ui #count { opacity: 0.7; }
+  #fs { position: fixed; left: 14px; top: 10px; z-index: 6; background: transparent; color: #f3efe8;
+    border: none; font-size: 20px; opacity: 0; transition: opacity 600ms; cursor: pointer; }
+  body.show-ui #fs { opacity: 0.8; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+
+<div id="intro">
+  <h1>七五三</h1>
+  <div class="date">2026 . 11 . 3 ／ 森戸大明神</div>
+  <div class="hint">下の Spotify の ▶ を押すと、曲と一緒に写真が流れます<br>（Spotify にログインしていると最後まで聴けます）</div>
+  <button id="silent">音なしで見る</button>
+</div>
+<div id="dock"><div id="player"></div></div>
+<div id="count"></div>
+<button id="fs" title="全画面">⛶</button>
+
+<script>
+const PHOTOS = [["001.jpg", 1920, 1440], ["002.jpg", 1440, 1920], ["003.jpg", 1440, 1920], ["004.jpg", 1920, 1440], ["005.jpg", 1920, 1440], ["006.jpg", 1920, 1440], ["007.jpg", 1440, 1920], ["008.jpg", 1920, 1440], ["009.jpg", 1440, 1920], ["010.jpg", 1920, 1440], ["011.jpg", 1920, 1441], ["012.jpg", 1440, 1920], ["013.jpg", 1920, 1440], ["014.jpg", 1920, 1440], ["015.jpg", 1920, 1440], ["016.jpg", 1920, 1440], ["017.jpg", 1920, 1440], ["018.jpg", 1920, 1440], ["019.jpg", 1920, 1440], ["020.jpg", 1440, 1920], ["021.jpg", 1920, 1440], ["022.jpg", 1920, 1440], ["023.jpg", 1920, 1440], ["024.jpg", 1920, 1440], ["025.jpg", 1920, 1440], ["026.jpg", 1920, 1440], ["027.jpg", 1920, 1440], ["028.jpg", 1920, 1440], ["029.jpg", 1920, 1440], ["030.jpg", 1920, 1440], ["031.jpg", 1440, 1920], ["032.jpg", 1920, 1440], ["033.jpg", 1920, 1440], ["034.jpg", 1920, 1440], ["035.jpg", 1920, 1440], ["036.jpg", 1920, 1440], ["037.jpg", 1920, 1440], ["038.jpg", 1920, 1440], ["039.jpg", 1920, 1440], ["040.jpg", 1920, 1440], ["041.jpg", 1440, 1920], ["042.jpg", 1920, 1440], ["043.jpg", 1920, 1440], ["044.jpg", 1920, 1440], ["045.jpg", 1920, 1440], ["046.jpg", 1920, 1440], ["047.jpg", 1920, 1440], ["048.jpg", 1920, 1440], ["049.jpg", 1920, 1440], ["050.jpg", 1920, 1440], ["051.jpg", 1920, 1440], ["052.jpg", 1440, 1920], ["053.jpg", 1920, 1440], ["054.jpg", 1920, 1440], ["055.jpg", 1920, 1440], ["056.jpg", 1920, 1440], ["057.jpg", 1920, 1440], ["058.jpg", 1920, 1440], ["059.jpg", 1440, 1920], ["060.jpg", 1440, 1920], ["061.jpg", 1920, 1440], ["062.jpg", 1920, 1440], ["063.jpg", 1920, 1439], ["064.jpg", 1440, 1920], ["065.jpg", 1439, 1920], ["066.jpg", 1920, 1440], ["067.jpg", 1439, 1920], ["068.jpg", 1439, 1920], ["069.jpg", 1920, 1440], ["070.jpg", 1920, 1440], ["071.jpg", 1920, 1440], ["072.jpg", 1920, 1439], ["073.jpg", 1920, 1440], ["074.jpg", 1440, 1920], ["075.jpg", 1440, 1920], ["076.jpg", 1440, 1920], ["077.jpg", 1583, 1541], ["078.jpg", 1575, 1533], ["079.jpg", 1537, 1497], ["080.jpg", 1530, 1490], ["081.jpg", 1920, 1440], ["082.jpg", 1920, 1441], ["083.jpg", 1440, 1920], ["084.jpg", 1920, 1441], ["085.jpg", 1920, 1440], ["086.jpg", 1920, 1440], ["087.jpg", 1920, 1439], ["088.jpg", 1920, 1439], ["089.jpg", 1920, 1440], ["090.jpg", 1920, 1440], ["091.jpg", 1920, 1440], ["092.jpg", 1440, 1920], ["093.jpg", 1440, 1920], ["094.jpg", 1920, 1440], ["095.jpg", 1920, 1440], ["096.jpg", 1440, 1920], ["097.jpg", 1440, 1920], ["098.jpg", 1440, 1920], ["099.jpg", 1920, 1440], ["100.jpg", 1920, 1440], ["101.jpg", 1440, 1920], ["102.jpg", 1440, 1920]];
+const TRACK = "spotify:track:3GiADMmI5jfkhF2o4a2G8N";
+// 並び：タイトル → 写真 → おわり（横長の画面では、続く縦写真2枚を左右に並べる）
+const landscapeScreen = window.innerWidth >= window.innerHeight;
+const frames = [{type: "title", h: "七五三", p: "2026 . 11 . 3"}];
+for (let i = 0; i < PHOTOS.length; i++) {
+  const [f, w, h] = PHOTOS[i];
+  const portrait = h > w;
+  const nx = PHOTOS[i + 1];
+  if (landscapeScreen && portrait && nx && nx[2] > nx[1] && Math.random() < 0.75) {
+    frames.push({type: "pair", srcs: ["img/" + f, "img/" + nx[0]]}); i++; continue;
+  }
+  frames.push({type: "photo", src: "img/" + f, fill: (!portrait) === landscapeScreen});
+}
+frames.push({type: "title", h: "おめでとう", p: "これからも、すくすくと"});
+const PHOTO_FRAMES = frames.length - 2;
+
+// Ken Burns：1枚ごとに、寄る・引く・流れる向きを変える
+const MOVES = [
+  [1.00, 1.10, 0, 0, 0, 0], [1.10, 1.00, 0, 0, 0, 0],
+  [1.08, 1.08, -2.5, 0, 2.5, 0], [1.08, 1.08, 2.5, 0, -2.5, 0],
+  [1.08, 1.08, 0, 2, 0, -2], [1.02, 1.12, 1.5, 1, -1, -1], [1.12, 1.03, -1.5, -1, 1, 1]
+];
+function setMove(el) {
+  const m = MOVES[Math.floor(Math.random() * MOVES.length)];
+  el.style.setProperty("--s0", m[0]); el.style.setProperty("--s1", m[1]);
+  el.style.setProperty("--x0", m[2] + "%"); el.style.setProperty("--y0", m[3] + "%");
+  el.style.setProperty("--x1", m[4] + "%"); el.style.setProperty("--y1", m[5] + "%");
+}
+
+const stage = document.getElementById("stage");
+const els = frames.map(f => {
+  const d = document.createElement("div"); d.className = "slide";
+  if (f.type === "photo") {
+    d.innerHTML = `<div class="bg"></div><div class="ph${f.fill ? " cover" : ""}"></div>`;
+    d.dataset.src = f.src; setMove(d.querySelector(".ph"));
+  } else if (f.type === "pair") {
+    d.innerHTML = `<div class="pair"><div class="cell"><div class="half"></div></div><div class="cell"><div class="half"></div></div></div>`;
+    d.dataset.srcs = f.srcs.join("|"); d.querySelectorAll(".half").forEach(setMove);
+  } else {
+    d.innerHTML = `<div class="title"><h1>${f.h}</h1><p>${f.p}</p></div>`;
+  }
+  stage.appendChild(d); return d;
+});
+function load(i) {
+  const d = els[i]; if (!d || d.dataset.loaded) return;
+  if (d.dataset.src) {
+    const url = `url("${d.dataset.src}")`;
+    d.querySelector(".bg").style.backgroundImage = url;
+    d.querySelector(".ph").style.backgroundImage = url;
+  } else if (d.dataset.srcs) {
+    const s2 = d.dataset.srcs.split("|");
+    d.querySelectorAll(".half").forEach((h, k) => h.style.backgroundImage = `url("${s2[k]}")`);
+  }
+  d.dataset.loaded = "1";
+}
+function setPace(ms) { document.documentElement.style.setProperty("--kbdur", Math.round(ms * 2.2) + "ms"); }
+let cur = -1;
+function show(i) {
+  i = Math.max(0, Math.min(frames.length - 1, i));
+  if (i === cur) return;
+  for (let k = i; k < i + 7; k++) load(k);
+  if (cur >= 0) { const prev = els[cur]; prev.classList.remove("on");
+    setTimeout(() => { if (!prev.classList.contains("on")) prev.classList.remove("run"); }, 1600); }
+  els[i].classList.remove("run"); void els[i].offsetWidth;   // 動きを最初から
+  els[i].classList.add("on", "run"); cur = i;
+  document.getElementById("count").textContent = `${i + 1} / ${frames.length}`;
+}
+for (let k = 0; k < 7; k++) load(k);
+
+function hideIntro() {
+  const it = document.getElementById("intro");
+  it.style.opacity = 0; setTimeout(() => it.style.display = "none", 900);
+  document.body.classList.add("playing");
+}
+
+// --- 曲に合わせて進める（曲の長さ ÷ 枚数） ---
+let mode = null, timer = null;
+function onPlayback(e) {
+  const { isPaused, position, duration } = e.data;
+  if (!duration) return;
+  if (duration < 60000) {            // 試聴（30秒）のときは一定間隔で進める
+    if (!isPaused && mode !== "timer") startTimer(3200);
+    return;
+  }
+  if (isPaused) return;
+  if (mode !== "song") { mode = "song"; stopTimer(); hideIntro(); }
+  const lead = 4000, tail = 6000;    // 最初はタイトル、最後は「おめでとう」
+  const span = Math.max(1, duration - lead - tail);
+  let i;
+  if (position < lead) i = 0;
+  else if (position > duration - tail) i = frames.length - 1;
+  else i = 1 + Math.floor((position - lead) / span * PHOTO_FRAMES);
+  setPace(span / PHOTO_FRAMES);
+  show(i);
+}
+function startTimer(ms) {
+  mode = "timer"; hideIntro(); stopTimer(); setPace(ms);
+  if (cur < 0) show(0);
+  timer = setInterval(() => { if (cur < frames.length - 1) show(cur + 1); else stopTimer(); }, ms);
+}
+function stopTimer() { if (timer) clearInterval(timer); timer = null; }
+document.getElementById("silent").onclick = () => startTimer(3200);
+
+window.onSpotifyIframeApiReady = (IFrameAPI) => {
+  IFrameAPI.createController(document.getElementById("player"),
+    { uri: TRACK, width: "100%", height: 80 },
+    (ctrl) => { ctrl.addListener("playback_update", onPlayback); });
+};
+
+// 操作：タップで操作パネル、矢印キーで前後、全画面
+let uiT;
+function pokeUI() { document.body.classList.add("show-ui"); clearTimeout(uiT);
+  uiT = setTimeout(() => document.body.classList.remove("show-ui"), 2500); }
+document.addEventListener("mousemove", pokeUI);
+document.addEventListener("touchstart", pokeUI, { passive: true });
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight") show(cur + 1);
+  if (e.key === "ArrowLeft") show(cur - 1);
+});
+document.getElementById("fs").onclick = () => {
+  const el = document.documentElement;
+  (el.requestFullscreen || el.webkitRequestFullscreen || (() => {})).call(el);
+};
+show(0);
+if (location.hash === "#silent") startTimer(3200);
+const mShow = location.hash.match(/^#show=(\w+)/);
+if (mShow) { hideIntro(); const k = mShow[1] === "pair" ? frames.findIndex(f => f.type === "pair") : +mShow[1]; show(k); }   // URLの最後に #silent で音なし自動再生
+</script>
+<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+</body>
+</html>
