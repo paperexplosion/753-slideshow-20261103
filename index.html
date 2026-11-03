@@ -11,12 +11,12 @@
   html, body { height: 100%; background: #000; color: #f3efe8; overflow: hidden;
     font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif; }
   #stage { position: fixed; inset: 0; }
-  .slide { position: absolute; inset: 0; opacity: 0; transition: opacity var(--fade) ease-in-out; }
+  .slide { position: absolute; inset: 0; opacity: 0; transition: opacity var(--fade) ease-in-out; display: none; }
+  .slide.near { display: block; }
   .slide.on { opacity: 1; }
-  .bg { position: absolute; inset: -40px; background-size: cover; background-position: center;
-    filter: blur(28px) brightness(0.45) saturate(1.1); transform: scale(1.1); }
+  .bg { position: absolute; inset: 0; background-size: cover; background-position: center; }
   .ph { position: absolute; inset: 0; background-repeat: no-repeat; background-position: center;
-    background-size: contain; will-change: transform; }
+    background-size: contain; }
   .ph.cover { background-size: cover; }
   .slide.run .ph, .slide.run .half { animation: kb var(--kbdur, 7s) linear forwards; }
   @keyframes kb {
@@ -25,7 +25,7 @@
   }
   .pair { position: absolute; inset: 0; display: flex; gap: 6px; background: #000; }
   .pair .cell { flex: 1; overflow: hidden; position: relative; }
-  .pair .half { position: absolute; inset: 0; background-size: cover; background-position: center; will-change: transform; }
+  .pair .half { position: absolute; inset: 0; background-size: cover; background-position: center; }
   .slide.run .pair .cell:nth-child(2) .half { animation-delay: -1.2s; }
   .title { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center;
     justify-content: center; text-align: center; gap: 18px; letter-spacing: 0.3em; }
@@ -69,7 +69,7 @@
 <button id="fs" title="全画面">⛶</button>
 
 <script>
-const PHOTOS = [["001.jpg", 1920, 1440], ["002.jpg", 1440, 1920], ["003.jpg", 1440, 1920], ["004.jpg", 1920, 1440], ["005.jpg", 1920, 1440], ["006.jpg", 1920, 1440], ["007.jpg", 1440, 1920], ["008.jpg", 1920, 1440], ["009.jpg", 1440, 1920], ["010.jpg", 1920, 1440], ["011.jpg", 1920, 1441], ["012.jpg", 1440, 1920], ["013.jpg", 1920, 1440], ["014.jpg", 1920, 1440], ["015.jpg", 1920, 1440], ["016.jpg", 1920, 1440], ["017.jpg", 1920, 1440], ["018.jpg", 1920, 1440], ["019.jpg", 1920, 1440], ["020.jpg", 1440, 1920], ["021.jpg", 1920, 1440], ["022.jpg", 1920, 1440], ["023.jpg", 1920, 1440], ["024.jpg", 1920, 1440], ["025.jpg", 1920, 1440], ["026.jpg", 1920, 1440], ["027.jpg", 1920, 1440], ["028.jpg", 1920, 1440], ["029.jpg", 1920, 1440], ["030.jpg", 1920, 1440], ["031.jpg", 1440, 1920], ["032.jpg", 1920, 1440], ["033.jpg", 1920, 1440], ["034.jpg", 1920, 1440], ["035.jpg", 1920, 1440], ["036.jpg", 1920, 1440], ["037.jpg", 1920, 1440], ["038.jpg", 1920, 1440], ["039.jpg", 1920, 1440], ["040.jpg", 1920, 1440], ["041.jpg", 1440, 1920], ["042.jpg", 1920, 1440], ["043.jpg", 1920, 1440], ["044.jpg", 1920, 1440], ["045.jpg", 1920, 1440], ["046.jpg", 1920, 1440], ["047.jpg", 1920, 1440], ["048.jpg", 1920, 1440], ["049.jpg", 1920, 1440], ["050.jpg", 1920, 1440], ["051.jpg", 1920, 1440], ["052.jpg", 1440, 1920], ["053.jpg", 1920, 1440], ["054.jpg", 1920, 1440], ["055.jpg", 1920, 1440], ["056.jpg", 1920, 1440], ["057.jpg", 1920, 1440], ["058.jpg", 1920, 1440], ["059.jpg", 1440, 1920], ["060.jpg", 1440, 1920], ["061.jpg", 1920, 1440], ["062.jpg", 1920, 1440], ["063.jpg", 1920, 1439], ["064.jpg", 1440, 1920], ["065.jpg", 1439, 1920], ["066.jpg", 1920, 1440], ["067.jpg", 1439, 1920], ["068.jpg", 1439, 1920], ["069.jpg", 1920, 1440], ["070.jpg", 1920, 1440], ["071.jpg", 1920, 1440], ["072.jpg", 1920, 1439], ["073.jpg", 1920, 1440], ["074.jpg", 1440, 1920], ["075.jpg", 1440, 1920], ["076.jpg", 1440, 1920], ["077.jpg", 1583, 1541], ["078.jpg", 1575, 1533], ["079.jpg", 1537, 1497], ["080.jpg", 1530, 1490], ["081.jpg", 1920, 1440], ["082.jpg", 1920, 1441], ["083.jpg", 1440, 1920], ["084.jpg", 1920, 1441], ["085.jpg", 1920, 1440], ["086.jpg", 1920, 1440], ["087.jpg", 1920, 1439], ["088.jpg", 1920, 1439], ["089.jpg", 1920, 1440], ["090.jpg", 1920, 1440], ["091.jpg", 1920, 1440], ["092.jpg", 1440, 1920], ["093.jpg", 1440, 1920], ["094.jpg", 1920, 1440], ["095.jpg", 1920, 1440], ["096.jpg", 1440, 1920], ["097.jpg", 1440, 1920], ["098.jpg", 1440, 1920], ["099.jpg", 1920, 1440], ["100.jpg", 1920, 1440], ["101.jpg", 1440, 1920], ["102.jpg", 1440, 1920]];
+const PHOTOS = [["002.jpg", 1440, 1920], ["003.jpg", 1440, 1920], ["004.jpg", 1920, 1440], ["005.jpg", 1920, 1440], ["006.jpg", 1920, 1440], ["007.jpg", 1440, 1920], ["008.jpg", 1920, 1440], ["009.jpg", 1440, 1920], ["010.jpg", 1920, 1440], ["011.jpg", 1920, 1441], ["012.jpg", 1440, 1920], ["013.jpg", 1920, 1440], ["014.jpg", 1920, 1440], ["015.jpg", 1920, 1440], ["016.jpg", 1920, 1440], ["017.jpg", 1920, 1440], ["018.jpg", 1920, 1440], ["019.jpg", 1920, 1440], ["020.jpg", 1440, 1920], ["021.jpg", 1920, 1440], ["022.jpg", 1920, 1440], ["023.jpg", 1920, 1440], ["024.jpg", 1920, 1440], ["025.jpg", 1920, 1440], ["026.jpg", 1920, 1440], ["027.jpg", 1920, 1440], ["028.jpg", 1920, 1440], ["029.jpg", 1920, 1440], ["030.jpg", 1920, 1440], ["031.jpg", 1440, 1920], ["032.jpg", 1920, 1440], ["033.jpg", 1920, 1440], ["034.jpg", 1920, 1440], ["035.jpg", 1920, 1440], ["036.jpg", 1920, 1440], ["037.jpg", 1920, 1440], ["038.jpg", 1920, 1440], ["039.jpg", 1920, 1440], ["040.jpg", 1920, 1440], ["041.jpg", 1440, 1920], ["042.jpg", 1920, 1440], ["043.jpg", 1920, 1440], ["044.jpg", 1920, 1440], ["045.jpg", 1920, 1440], ["046.jpg", 1920, 1440], ["047.jpg", 1920, 1440], ["048.jpg", 1920, 1440], ["049.jpg", 1920, 1440], ["050.jpg", 1920, 1440], ["051.jpg", 1920, 1440], ["052.jpg", 1440, 1920], ["053.jpg", 1920, 1440], ["054.jpg", 1920, 1440], ["055.jpg", 1920, 1440], ["056.jpg", 1920, 1440], ["057.jpg", 1920, 1440], ["058.jpg", 1920, 1440], ["059.jpg", 1440, 1920], ["060.jpg", 1440, 1920], ["061.jpg", 1920, 1440], ["062.jpg", 1920, 1440], ["063.jpg", 1920, 1439], ["064.jpg", 1440, 1920], ["065.jpg", 1439, 1920], ["066.jpg", 1920, 1440], ["067.jpg", 1439, 1920], ["068.jpg", 1439, 1920], ["069.jpg", 1920, 1440], ["070.jpg", 1920, 1440], ["071.jpg", 1920, 1440], ["072.jpg", 1920, 1439], ["073.jpg", 1920, 1440], ["074.jpg", 1440, 1920], ["075.jpg", 1440, 1920], ["076.jpg", 1440, 1920], ["077.jpg", 1583, 1541], ["078.jpg", 1575, 1533], ["079.jpg", 1537, 1497], ["080.jpg", 1530, 1490], ["081.jpg", 1920, 1440], ["082.jpg", 1920, 1441], ["083.jpg", 1440, 1920], ["084.jpg", 1920, 1441], ["085.jpg", 1920, 1440], ["086.jpg", 1920, 1440], ["087.jpg", 1920, 1439], ["088.jpg", 1920, 1439], ["089.jpg", 1920, 1440], ["090.jpg", 1920, 1440], ["091.jpg", 1920, 1440], ["092.jpg", 1440, 1920], ["093.jpg", 1440, 1920], ["094.jpg", 1920, 1440], ["095.jpg", 1920, 1440], ["096.jpg", 1440, 1920], ["097.jpg", 1440, 1920], ["098.jpg", 1440, 1920], ["099.jpg", 1920, 1440], ["100.jpg", 1920, 1440], ["101.jpg", 1440, 1920], ["102.jpg", 1440, 1920]];
 // 並び：タイトル → 写真 → おわり（横長の画面では、続く縦写真2枚を左右に並べる）
 const landscapeScreen = window.innerWidth >= window.innerHeight;
 const frames = [{type: "title", h: "七五三", p: "2026 . 11 . 3"}];
@@ -113,31 +113,46 @@ const els = frames.map(f => {
   }
   stage.appendChild(d); return d;
 });
+const KEEP = 3;   // 今の場面の前後だけ写真を持つ（スマホのメモリ切れで止まらないように）
 function load(i) {
   const d = els[i]; if (!d || d.dataset.loaded) return;
   if (d.dataset.src) {
-    const url = `url("${d.dataset.src}")`;
-    d.querySelector(".bg").style.backgroundImage = url;
-    d.querySelector(".ph").style.backgroundImage = url;
+    d.querySelector(".bg").style.backgroundImage = `url("${d.dataset.src.replace("img/", "img/bg/")}")`;
+    d.querySelector(".ph").style.backgroundImage = `url("${d.dataset.src}")`;
   } else if (d.dataset.srcs) {
     const s2 = d.dataset.srcs.split("|");
     d.querySelectorAll(".half").forEach((h, k) => h.style.backgroundImage = `url("${s2[k]}")`);
   }
   d.dataset.loaded = "1";
 }
+function unload(i) {
+  const d = els[i]; if (!d || !d.dataset.loaded) return;
+  d.querySelectorAll(".bg, .ph, .half").forEach(e => e.style.backgroundImage = "");
+  delete d.dataset.loaded;
+}
+function keepNear(i) {
+  els.forEach((d, k) => {
+    const near = k >= i - 1 && k <= i + KEEP;
+    if (near) { load(k); d.classList.add("near"); }
+    else if (k !== cur) { unload(k); d.classList.remove("near"); }
+  });
+  // 次の数枚は先に読み込んでおく（表示はしない）
+  for (let k = i + 1; k <= i + KEEP; k++) if (frames[k] && frames[k].type !== "title") {
+    const f = frames[k]; (f.srcs || [f.src]).forEach(u => { const im = new Image(); im.src = u; });
+  }
+}
 function setPace(ms) { document.documentElement.style.setProperty("--kbdur", Math.round(ms * 2.2) + "ms"); }
 let cur = -1;
 function show(i) {
   i = Math.max(0, Math.min(frames.length - 1, i));
   if (i === cur) return;
-  for (let k = i; k < i + 7; k++) load(k);
+  keepNear(i);
   if (cur >= 0) { const prev = els[cur]; prev.classList.remove("on");
     setTimeout(() => { if (!prev.classList.contains("on")) prev.classList.remove("run"); }, 1600); }
   els[i].classList.remove("run"); void els[i].offsetWidth;   // 動きを最初から
   els[i].classList.add("on", "run"); cur = i;
   document.getElementById("count").textContent = `${i + 1} / ${frames.length}`;
 }
-for (let k = 0; k < 7; k++) load(k);
 
 function hideIntro() {
   const it = document.getElementById("intro");
@@ -161,7 +176,19 @@ function syncToSong() {
   show(i);
   requestAnimationFrame(syncToSong);
 }
+let lock = null;
+async function keepAwake() {
+  try { if ("wakeLock" in navigator && !lock) { lock = await navigator.wakeLock.request("screen");
+    lock.addEventListener("release", () => { lock = null; }); } } catch (e) {}
+}
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState !== "visible") return;
+  keepAwake();
+  if (mode === "song" && bgm.paused && !bgm.ended) { bgm.play().catch(() => {}); requestAnimationFrame(syncToSong); }
+});
+bgm.addEventListener("ended", () => show(frames.length - 1));
 document.getElementById("play").onclick = () => {
+  keepAwake();
   mode = "song"; stopTimer(); hideIntro();
   bgm.currentTime = 0; bgm.play().catch(() => startTimer(3200));
   requestAnimationFrame(syncToSong);
@@ -177,7 +204,7 @@ function startTimer(ms) {
   timer = setInterval(() => { if (cur < frames.length - 1) show(cur + 1); else stopTimer(); }, ms);
 }
 function stopTimer() { if (timer) clearInterval(timer); timer = null; }
-document.getElementById("silent").onclick = () => startTimer(3200);
+document.getElementById("silent").onclick = () => { keepAwake(); startTimer(3200); };
 
 // 操作：タップで操作パネル、矢印キーで前後、全画面
 let uiT;
